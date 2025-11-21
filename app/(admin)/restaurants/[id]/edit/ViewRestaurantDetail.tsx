@@ -1,4 +1,3 @@
-// app/(admin)/restaurants/[id]/edit/EditRestaurantForm.tsx
 'use client'
 
 import { useState, useTransition } from 'react'

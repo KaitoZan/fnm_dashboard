@@ -1,4 +1,3 @@
-// app/(admin)/approvals/ApprovalActions.tsx
 'use client'
 
 import { useState } from "react";

@@ -1,4 +1,3 @@
-// app/(admin)/approvals/RequestDetailModal.tsx
 'use client'
 
 import React from 'react'

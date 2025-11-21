@@ -1,4 +1,3 @@
-// app/(admin)/restaurants/RestaurantActions.tsx
 'use client'
 
 import { useTransition } from 'react'

@@ -1,4 +1,3 @@
-// app/(admin)/approvals/ApprovalCard.tsx
 'use client'
 
 import { useState, useTransition } from "react";

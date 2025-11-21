@@ -1,4 +1,3 @@
-// app/(admin)/approvals/PreviewComponents.tsx
 'use client'
 
 import React from 'react'
