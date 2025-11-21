@@ -1,25 +1,19 @@
 @import "tailwindcss";
 
 /* --- Keyframe Animation สำหรับพื้นหลังเคลื่อนที่ --- */
-@keyframes moveBg {
+/* FIX: ใช้ 100% เพื่อครอบคลุมช่วงการเคลื่อนที่ทั้งหมดจากซ้ายไปขวาของรูปภาพที่ถูกขยาย */
+@keyframes moveBgAlternate {
     0% {
+        /* เริ่มต้นที่ซ้ายสุดของรูปภาพที่ถูกขยาย */
         background-position-x: 0%;
     }
     100% {
-        /* เคลื่อนที่ 200% เพื่อให้เกิดการ Loop ที่ต่อเนื่อง */
-        background-position-x: -200%;
+        /* เคลื่อนที่ไปขวาสุดของรูปภาพที่ถูกขยาย (100% ของระยะที่เคลื่อนที่ได้) */
+        background-position-x: 100%; 
     }
 }
 
-.animate-bg-scroll {
-    /* กำหนดขนาดพื้นหลังให้ใหญ่พอ เพื่อให้เห็นการเคลื่อนที่ */
-    background-size: 200% 100%;
-    /* ใช้ animation: ชื่อ | ระยะเวลา | รูปแบบ | นับไม่ถ้วน */
-    animation: moveBg 60s linear infinite;
-    background-image: url('/bg1.jpg');
-    /* FIX: เพิ่ม background-repeat เพื่อให้รูปภาพทำซ้ำในแนวแกน X */
-    background-repeat: repeat-x;
-}
+/* ลบ Keyframe moveBg และคลาส .animate-bg-scroll ออก */
 /* ------------------------------------------------ */
 
 :root {
@@ -47,5 +41,22 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  
+  /* --- สไตล์พื้นหลังที่แก้ไข: รูปเดียว, ไม่ซ้ำ, ขยับไปกลับ --- */
+  
+  /* Path ที่ผู้ใช้ยืนยันว่าใช้งานได้ */
+  background-image: url('../public/bg4.jpg'); 
+  
+  /* FIX 1: ไม่ให้รูปภาพซ้ำ (แก้ไขปัญหาการต่อกันของรูปภาพ) */
+  background-repeat: no-repeat; 
+
+  /* FIX 2: ตั้งค่าขนาดให้ครอบคลุมจอ (ใหญ่กว่า 100% เล็กน้อย) เพื่อให้เกิดการเคลื่อนที่ได้ */
+  background-size: 150% auto; 
+  
+  /* กำหนดตำแหน่งเริ่มต้นให้อยู่ซ้ายบน */
+  background-position: 0% 0%;
+  
+  /* FIX 3: ใช้ animation ตัวใหม่ที่สลับทิศทาง (Alternate) */
+  animation: moveBgAlternate 60s linear infinite alternate; 
+  /* ------------------------------ */
 }
-/* ได้ลบสไตล์สำหรับ .phone-preview และ .phone-screen ออกจากไฟล์นี้แล้ว */
