@@ -1,7 +1,29 @@
 @import "tailwindcss";
 
+/* --- Keyframe Animation สำหรับพื้นหลังเคลื่อนที่ --- */
+@keyframes moveBg {
+    0% {
+        background-position-x: 0%;
+    }
+    100% {
+        /* เคลื่อนที่ 200% เพื่อให้เกิดการ Loop ที่ต่อเนื่อง */
+        background-position-x: -200%;
+    }
+}
+
+.animate-bg-scroll {
+    /* กำหนดขนาดพื้นหลังให้ใหญ่พอ เพื่อให้เห็นการเคลื่อนที่ */
+    background-size: 200% 100%;
+    /* ใช้ animation: ชื่อ | ระยะเวลา | รูปแบบ | นับไม่ถ้วน */
+    animation: moveBg 60s linear infinite;
+    background-image: url('/bg1.jpg');
+    /* FIX: เพิ่ม background-repeat เพื่อให้รูปภาพทำซ้ำในแนวแกน X */
+    background-repeat: repeat-x;
+}
+/* ------------------------------------------------ */
+
 :root {
-  --background: #ffffff;
+  --background: #2d2a2a;
   --foreground: #171717;
 }
 
@@ -10,17 +32,20 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-poppins: 'Poppins', sans-serif;
+  --font-kanit: 'Kanit', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #3f3939;
   }
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* ได้ลบสไตล์สำหรับ .phone-preview และ .phone-screen ออกจากไฟล์นี้แล้ว */
