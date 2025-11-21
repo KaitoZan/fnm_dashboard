@@ -19,7 +19,6 @@ export type Database = {
           content: string
           created_at: string
           id: number
-          rating_score: number
           res_id: string
           user_id: string | null
         }
@@ -27,7 +26,6 @@ export type Database = {
           content: string
           created_at?: string
           id?: number
-          rating_score?: number
           res_id: string
           user_id?: string | null
         }
@@ -35,7 +33,6 @@ export type Database = {
           content?: string
           created_at?: string
           id?: number
-          rating_score?: number
           res_id?: string
           user_id?: string | null
         }
@@ -352,7 +349,7 @@ export type Database = {
           created_at: string
           id: string
           location: string | null
-          phone_no: string
+          phone_no: string | null
           role: string | null
           user_name: string
         }
@@ -361,7 +358,7 @@ export type Database = {
           created_at?: string
           id?: string
           location?: string | null
-          phone_no: string
+          phone_no?: string | null
           role?: string | null
           user_name: string
         }
@@ -370,11 +367,50 @@ export type Database = {
           created_at?: string
           id?: string
           location?: string | null
-          phone_no?: string
+          phone_no?: string | null
           role?: string | null
           user_name?: string
         }
         Relationships: []
+      }
+      user_ratings_res: {
+        Row: {
+          created_at: string
+          id: number
+          rating: number
+          res_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          rating: number
+          res_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          rating?: number
+          res_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_ratings_res_id_fkey"
+            columns: ["res_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_ratings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

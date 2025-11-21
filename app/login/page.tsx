@@ -104,12 +104,12 @@ export default function LoginPage() {
         onSubmit={handleLogin}
         className="p-8 bg-black/80 rounded-lg shadow-xl flex flex-col w-full max-w-md"
       >
-        <Image
-          src="/assets/images/logoApp.png"
-          width={500}
-          height={300}
-          alt="my photo"
-        />
+          <img 
+      src="/logoApp.png" 
+      alt="Logo" 
+      className="h-[50px] object-contain" 
+      
+    />
         <h2 className="text-center text-white ">Admin Dashboard Login</h2>
 
         <div className="mb-4 flex flex-col">
@@ -162,7 +162,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="p-3 border-none rounded bg-blue-600 text-white text-base cursor-pointer hover:bg-blue-700 disabled:opacity-50 transition-colors"
+          className="p-3 border-none rounded bg-fuchsia-300/40 text-white text-base cursor-pointer hover:bg-blue-700 disabled:opacity-50 transition-colors"
         >
           {loading ? "กำลังโหลด..." : "Login"}
         </button>
