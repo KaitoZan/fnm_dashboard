@@ -81,12 +81,7 @@ export default function LoginPage() {
         onSubmit={handleLogin}
         className="p-8 bg-black/80 rounded-lg shadow-xl flex flex-col w-full max-w-md"
       >
-          <img 
-      src="/logoApp.png" 
-      alt="Logo" 
-      className="h-[50px] object-contain" 
       
-    />
         <h2 className="text-center text-white ">Admin Dashboard Login</h2>
 
         <div className="mb-4 flex flex-col">
