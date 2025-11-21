@@ -1,8 +1,8 @@
 // app/login/page.tsx
 "use client";
-import Image from "next/image";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+// (NEW) Import useEffect และ useSearchParams
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 // (1) Import Client ตัวใหม่จาก @supabase/ssr
 import { createClient } from "@/lib/supabase/client";
 import type { Database } from "@/types/supabase";
@@ -13,6 +13,7 @@ type Profile = Database["public"]["Tables"]["user_profiles"]["Row"];
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams(); // (NEW) Hook สำหรับอ่านค่าใน URL
   const supabase = createClient(); // (2) ใช้งาน Client ตัวใหม่
 
   const [email, setEmail] = useState("");
@@ -21,6 +22,23 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   // (7) State สำหรับการมองเห็นรหัสผ่าน
   const [showPassword, setShowPassword] = useState(false);
+
+  // (NEW) Effect สำหรับตรวจสอบ Error จาก URL (ส่งมาจาก /auth/callback)
+  useEffect(() => {
+    const urlError = searchParams.get('error');
+    const urlMessage = searchParams.get('message');
+    
+    if (urlError === 'unauthorized') {
+      // แสดงข้อความสำหรับผู้ที่ล็อกอินสำเร็จแต่ไม่ใช่ Admin
+      setError("คุณไม่มีสิทธิ์เข้าถึงส่วนนี้ (Admin only)");
+      // เคลียร์ URL parameter
+      router.replace('/login', { scroll: false }); 
+    } else if (urlMessage) {
+      // ข้อความอื่น ๆ ที่อาจถูกส่งมาในอนาคต
+      setError(urlMessage);
+      router.replace('/login', { scroll: false }); 
+    }
+  }, [searchParams, router]); 
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -59,11 +77,12 @@ export default function LoginPage() {
           // ถ้าเป็น Admin -> ไปหน้า Dashboard
           // (เราต้อง refresh หน้าเพื่อให้ middleware ทำงานและตั้งค่า cookie ใหม่)
           router.push("/dashboard");
-          router.refresh(); // <-- เพิ่มบรรทัดนี้
+          router.refresh(); 
         } else {
           // ถ้าไม่ใช่ Admin
           await supabase.auth.signOut();
-          throw new Error("คุณไม่มีสิทธิ์เข้าถึงส่วนนี้ (Admin only)");
+          // *** แก้ไข: ข้อความตรงตามที่คุณต้องการ ***
+          throw new Error("คุณไม่มีสิทธิ์เข้าถึงส่วนนี้ (Admin only)"); 
         }
       }
     } catch (err: any) {
@@ -74,27 +93,7 @@ export default function LoginPage() {
   };
 
   // (8) ฟังก์ชันสำหรับ Google Sign-in
-  const handleGoogleLogin = async () => {
-    setError(null);
-    setLoading(true);
-    try {
-      // เรียกใช้ signInWithOAuth ของ Supabase
-      const { error: authError } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          // Redirect ไปที่ /dashboard หลัง Login สำเร็จ
-          redirectTo: `${window.location.origin}/dashboard`,
-        },
-      });
 
-      if (authError) throw authError;
-
-      // Supabase จะจัดการ Redirect โดยอัตโนมัติ
-    } catch (err: any) {
-      setError(err.message || "เกิดข้อผิดพลาดในการล็อคอินด้วย Google");
-      setLoading(false);
-    }
-  };
 
   return (
     // div นอกสุด (คงเดิม)
@@ -167,25 +166,9 @@ export default function LoginPage() {
           {loading ? "กำลังโหลด..." : "Login"}
         </button>
 
-        {/* (12) ปุ่ม Login ด้วย Google */}
-        <div className="mt-4 border-t border-gray-200 pt-4">
-          <button
-            type="button"
-            onClick={handleGoogleLogin}
-            disabled={loading}
-            className="w-full p-3 border border-gray-300 rounded bg-white text-gray-700 text-base cursor-pointer hover:bg-gray-50 disabled:opacity-50 transition-colors flex items-center justify-center gap-3"
-          >
-            <img
-              src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png"
-              alt="Google"
-              className="w-5 h-5"
-            />
-            {loading ? "กำลังโหลด..." : "เข้าสู่ระบบด้วย Google"}
-          </button>
-        </div>
+
+       
       </form>
     </div>
   );
 }
-
-// ลบ const styles ที่ไม่ได้ใช้งานแล้ว
