@@ -1,8 +1,8 @@
-// app/(admin)/layout.tsx
-import { createClient } from "@/lib/supabase/server"; // (1) ใช้ Server Client
+
+import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import LogoutButton from "./LogoutButton"; // (5) เราจะสร้างปุ่ม Logout แยก
+import LogoutButton from "./LogoutButton"; 
 import type { Database } from "@/types/supabase";
 
 // (2) สร้าง Type ของ Profile
@@ -25,10 +25,10 @@ export default async function AdminLayout({
 
   // (4) ดึงข้อมูล User และ Profile (ใน Server Component)
   const supabase = createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data, error } = await supabase.auth.getUser();
+  const user = data.user;
 
-  if (!user) {
-    // Middleware ควรจะกันไว้แล้ว แต่เรากันเหนียวอีกชั้น
+  if (error || !user) {
     return redirect("/login");
   }
 
