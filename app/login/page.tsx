@@ -1,8 +1,7 @@
 // app/login/page.tsx
 "use client";
-// (NEW) Import useEffect และ useSearchParams
-import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 // (1) Import Client ตัวใหม่จาก @supabase/ssr
 import { createClient } from "@/lib/supabase/client";
 import type { Database } from "@/types/supabase";
@@ -13,7 +12,6 @@ type Profile = Database["public"]["Tables"]["user_profiles"]["Row"];
 
 export default function LoginPage() {
   const router = useRouter();
-  const searchParams = useSearchParams(); // (NEW) Hook สำหรับอ่านค่าใน URL
   const supabase = createClient(); // (2) ใช้งาน Client ตัวใหม่
 
   const [email, setEmail] = useState("");
@@ -22,23 +20,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   // (7) State สำหรับการมองเห็นรหัสผ่าน
   const [showPassword, setShowPassword] = useState(false);
-
-  // (NEW) Effect สำหรับตรวจสอบ Error จาก URL (ส่งมาจาก /auth/callback)
-  useEffect(() => {
-    const urlError = searchParams.get('error');
-    const urlMessage = searchParams.get('message');
-    
-    if (urlError === 'unauthorized') {
-      // แสดงข้อความสำหรับผู้ที่ล็อกอินสำเร็จแต่ไม่ใช่ Admin
-      setError("คุณไม่มีสิทธิ์เข้าถึงส่วนนี้ (Admin only)");
-      // เคลียร์ URL parameter
-      router.replace('/login', { scroll: false }); 
-    } else if (urlMessage) {
-      // ข้อความอื่น ๆ ที่อาจถูกส่งมาในอนาคต
-      setError(urlMessage);
-      router.replace('/login', { scroll: false }); 
-    }
-  }, [searchParams, router]); 
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -77,12 +58,11 @@ export default function LoginPage() {
           // ถ้าเป็น Admin -> ไปหน้า Dashboard
           // (เราต้อง refresh หน้าเพื่อให้ middleware ทำงานและตั้งค่า cookie ใหม่)
           router.push("/dashboard");
-          router.refresh(); 
+          router.refresh(); // <-- เพิ่มบรรทัดนี้
         } else {
           // ถ้าไม่ใช่ Admin
           await supabase.auth.signOut();
-          // *** แก้ไข: ข้อความตรงตามที่คุณต้องการ ***
-          throw new Error("คุณไม่มีสิทธิ์เข้าถึงส่วนนี้ (Admin only)"); 
+          throw new Error("คุณไม่มีสิทธิ์เข้าถึงส่วนนี้ (Admin only)");
         }
       }
     } catch (err: any) {
@@ -92,8 +72,7 @@ export default function LoginPage() {
     }
   };
 
-  // (8) ฟังก์ชันสำหรับ Google Sign-in
-
+  // (8) ฟังก์ชันสำหรับ Google Sign-in - ถูกลบออก
 
   return (
     // div นอกสุด (คงเดิม)
@@ -166,9 +145,11 @@ export default function LoginPage() {
           {loading ? "กำลังโหลด..." : "Login"}
         </button>
 
-
-       
+        
+        
       </form>
     </div>
   );
 }
+
+// ลบ const styles ที่ไม่ได้ใช้งานแล้ว
