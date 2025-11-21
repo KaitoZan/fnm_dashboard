@@ -179,7 +179,7 @@ export default function ApprovalCard({ request }: { request: EditRequestWithProf
             <RenderField label="ทานที่ร้านได้" value={proposedData.has_dine_in ? "ใช่" : "ไม่"} />
             <RenderField label="สถานะ (ค่าเริ่มต้น)" value={proposedData.is_open ? "เปิด" : "ปิด"} />
             
-            <RenderImage label="รูปหน้าปก (res_img)" imageUrl={proposedData.res_img ?? null} /> {/* <-- แก้ไขตรงนี้ */}
+            <RenderImage label="รูปหน้าปก (res_img)" imageUrl={proposedData.res_img ?? null} /> 
             <RenderImageArray 
                 label="แกลเลอรี (gallery_imgs_urls)" 
                 images={Array.isArray(proposedData.gallery_imgs_urls) ? proposedData.gallery_imgs_urls as string[] : []} 
@@ -189,7 +189,7 @@ export default function ApprovalCard({ request }: { request: EditRequestWithProf
                 items={Array.isArray(proposedData.promo_imgs_urls) ? proposedData.promo_imgs_urls as string[] : []} 
             />
             
-            <RenderMenu label="รายการเมนู (menus)" menus={proposedData.menus ?? null} /> {/* <-- แก้ไขตรงนี้ */}
+            <RenderMenu label="รายการเมนู (menus)" menus={proposedData.menus ?? null} /> 
             
             {error && <p className="text-red-600">{error}</p>}
           </div>
